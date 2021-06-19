@@ -21,7 +21,12 @@ while($true) {
     } elseif ($command_word -eq "open") {
          # Recurse to find projects
         python project_opener.py $command_arr[1..($command_arr.Length - 1)]
-    } else {
+    } elseif ($command_word -eq "gitupdate") {
+        # Recurse to find projects
+        Invoke-Expression -Command "git add -A"
+        Invoke-Expression -Command "git commit -m $($command_arr[1..($command_arr.Length - 1)])"
+        Invoke-Expression -Command "git push"
+   } else {
         Write-Host -Object "Not a valid command. Try again!"
     }
 
