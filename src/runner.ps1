@@ -22,10 +22,17 @@ while($true) {
          # Recurse to find projects
         python project_opener.py $command_arr[1..($command_arr.Length - 1)]
     } elseif ($command_word -eq "gitupdate") {
-        # Recurse to find projects
-        Invoke-Expression -Command "git add -A"
-        Invoke-Expression -Command "git commit -m $($command_arr[1..($command_arr.Length - 1)])"
-        Invoke-Expression -Command "git push"
+        # git add, commit and push all in one command
+        $commit_msg = $command_arr[1..($command_arr.Length - 1)]
+        $confirmation = Read-Host -Prompt "Commit all files with message ""$($commit_msg)""? (Enter y for yes) "
+
+        if ($confirmation.ToLower() -eq "y") {
+            Invoke-Expression -Command "git add -A"
+            Invoke-Expression -Command "git commit -m ""$($commit_msg)"" "
+            Invoke-Expression -Command "git push"
+        } else {
+            Write-Host -Object "Commit cancelled."
+        }
    } else {
         Write-Host -Object "Not a valid command. Try again!"
     }
