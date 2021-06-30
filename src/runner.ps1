@@ -1,5 +1,16 @@
 # Main class through where all of the Powershell code will be run
 
+Write-Host -Object "Terminal-Velocity starting..."
+
+$name = $null
+if([String]::IsNullOrWhiteSpace((Get-Content -Path "profile.txt"))) {
+    $name = Read-Host -Prompt "Enter your name"
+    Out-File -InputObject $name -FilePath "profile.txt"
+} else {
+    $name = Get-Content -Path "profile.txt"
+}
+Write-Host -Object "Hello, $name!"
+
 while($true) {
     $command = Read-Host -Prompt "Enter command" # Get command from powershell
     $command_arr = $command.Split(" ")
@@ -14,6 +25,15 @@ while($true) {
     } elseif ($command_word -eq "open") {
          # Recurse to find projects
         python project_opener.py $command_arr[1..($command_arr.Length - 1)]
+    } elseif ($command_word -eq "profile") {
+        Write-Host "Current Profile: $name"
+        $name_change_question = Read-Host -Prompt "Change name? (Enter y for yes) "
+
+        if($name_change_question.ToLower() -eq "y") {
+            $name = Read-Host -Prompt "Enter your name"
+            Out-File -InputObject $name -FilePath "profile.txt"
+            Write-Host -Object "Name changed to $name!"
+        }
     } elseif ($command_word -eq "gitupdate") {
         # git add, commit and push all in one command
         $commit_msg = $command_arr[1..($command_arr.Length - 1)]
@@ -29,8 +49,6 @@ while($true) {
    } else {
         Write-Host -Object "Not a valid command. Try again!"
     }
-
-    # Now, need to implement functionality for opening up projects on VSCode, and other functionality such as opening spotify
 }
 
 Write-Host -Object "Terminal-Velocity closing..."
