@@ -9,13 +9,6 @@ while($true) {
         break
     } elseif ($command_word -eq "search") {
         sh chrome_runner.sh $command_arr[1..($command_arr.Length - 1)]
-    } elseif ($command_word -eq "play") {
-        #Start-Process -FilePath "/Applications/"
-        Find-Module -Name "PSSpotify"
-        if($?) {
-            Write-Host -Object "Module Found!"
-        }
-        # Actual playing and everything should go here
     } elseif ($command_word -eq "status") {
         sh status_checker.sh
     } elseif ($command_word -eq "open") {
